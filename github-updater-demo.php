@@ -11,7 +11,7 @@ namespace Q\Widgets;
  * Text Domain:        QWidgets
  * Tested up to:       6.8.1
  * Requires at least:  6.5
- * Requires PHP:       8.2
+ * Requires PHP:       7.1
  * Update URI:         https://github.com/rhavin/QWidgets
  * License:            none
  * License URI:        none
