@@ -1,5 +1,5 @@
 <?php
-namespace Q\Widgets\Company;
+namespace Q\Widgets;
 /**
  * Adds Company widget.
  */

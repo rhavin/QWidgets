@@ -20,7 +20,7 @@ class QWidgetsPlugin
 add_action( 'widgets_init', 'register_my_widget' );
 
 function register_my_widget() {
-    register_widget( 'Company' );
+    register_widget( 'Q\Widgets\Company' );
 }
 
 ?>
