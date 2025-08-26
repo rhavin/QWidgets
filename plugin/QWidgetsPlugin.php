@@ -17,10 +17,10 @@ class QWidgetsPlugin
     }
 }
 
-add_action( 'widgets_init', 'register_my_widget' );
+add_action( 'widgets_init', __NAMESPACE__ .'\\register_widgets' );
 
-function register_my_widget() {
-    register_widget( 'Q\Widgets\Company' );
+function register_widgets() {
+    register_widget( 'Q\Widgets\Company\Company' );
 }
 
 ?>
