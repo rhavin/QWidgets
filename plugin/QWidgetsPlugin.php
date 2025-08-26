@@ -2,7 +2,7 @@
 
 namespace Q\Widgets;
 
-class Plugin
+class QWidgetsPlugin
 {
     public function __construct(string $file)
     {
