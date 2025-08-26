@@ -20,7 +20,7 @@ class QWidgetsPlugin
 add_action( 'widgets_init', __NAMESPACE__ .'\\register_widgets' );
 
 function register_widgets() {
-    register_widget( 'Q\Widgets\Company\Company' );
+ #   register_widget( 'Q\Widgets\Company\Company' );
 }
 
 ?>

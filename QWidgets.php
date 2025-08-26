@@ -4,7 +4,7 @@ namespace Q\Widgets;
 /**
  * Plugin Name:        QWidgets
  * Plugin URI:         https://github.com/rhavin/QWidgets
- * Version:            0.0.2
+ * Version:            0.0.3
  * Description:        Description
  * Author:             rhavin
  * Author URI:         https://rhavin.de/
