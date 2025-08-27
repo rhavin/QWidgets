@@ -1,5 +1,5 @@
 <?php
-namespace Q\Widgets\Company;
+namespace Q\WPWidgets\widgets\company;
 /**
  * Adds Company widget.
  */

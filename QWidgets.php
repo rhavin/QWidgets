@@ -1,5 +1,5 @@
 <?php
-namespace Q\Widgets;
+namespace Q\WPWidgets;
 
 /**
  * Plugin Name:        QWidgets

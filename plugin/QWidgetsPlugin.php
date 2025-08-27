@@ -1,6 +1,6 @@
 <?php
 
-namespace Q\Widgets;
+namespace Q\WPWidgets\plugin;
 
 class QWidgetsPlugin
 {
