@@ -93,11 +93,11 @@ class Company extends \WP_Widget {
 	public function update($new_instance, $old_instance)
 	{
 		$instance = array();
-		$instance['title'] = self::strip('title', $new_instance);
+		$instance['title'] = 'QCormpany';
 		$instance['name'] = 'Hoffmann Dental Manufaktur GmbH';
 		$instance['streetAddress'] = 'Komturstraße 58-62';
-		$instance['postalCode'] = '12099';
-		$instance['addressLocality'] = 'Berlin';
+		$instance['postalCode'] = self::strip('postalCode', $new_instance);
+		$instance['addressLocality'] = self::strip('addressLocality', $new_instance);
 		$instance['addressCountry'] = 'Germany';
 		$instance['contacts'] = [
 			[
@@ -159,7 +159,7 @@ class Company extends \WP_Widget {
 	public static function inputfield($id, $name, $label, $value, $type='text', $size=100) {
 		return '<label for="'.$name.'">'.$label.':</label>'
 			.'<input class="widefat" id="'.$id.'" name="'.$name.'" type="'
-			.$text.'" value="'.$value.'" />';
+			.$type.'" value="'.$value.'" />';
 
 	}
 }
