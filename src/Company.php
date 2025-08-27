@@ -25,17 +25,17 @@ class Company extends \WP_Widget {
 		if (!empty($vTitle))
 			$vTitle = $before_title . $vTitle . $after_title;
 		echo '<div class="corpAddress" vocab="https://schema.org/" typeof="Organization">'."\n";
-		echo property('name', 'h1', $instance, 1, 'title');
-		$address = property('streetAddress', 'span', $instance, 2)
-			.property('postalCode', 'span', $instance, 2)
-			.property('addressLocality', 'span', $instance, 2)
-			.property('addressCountry', 'span', $instance, 2);
+		echo self::property('name', 'h1', $vTitle, 2);
+		$address = keyproperty('streetAddress', 'span', $instance, 2)
+			.self::keyproperty('postalCode', 'span', $instance, 2)
+			.self::keyproperty('addressLocality', 'span', $instance, 2)
+			.self::keyproperty('addressCountry', 'span', $instance, 2);
 		if ($address != '') {
 			echo '  <address property="address" typeof="PostalAddress">'."\n";
 			echo $address;
 			echo "  </address>\n";
 		}
-		foreach ($instance['contacts'] as $contact)  {
+/*		foreach ($instance['contacts'] as $contact)  {
 			$html = property('contactType', 'h2', $contact, 4)
 				.property('telephone', 'span', $contact, 4)
 				.property('faxNumber', 'span', $contact, 4)
@@ -54,7 +54,8 @@ class Company extends \WP_Widget {
 				echo $html;
 				echo "  </div>\n";
 			}
-		}
+		} */
+		echo "</div>\n";
 		echo $after_widget;
 	}
 
@@ -92,18 +93,19 @@ class Company extends \WP_Widget {
 		$instance['addressLocality'] = 'Berlin';
 		$instance['addressCountry'] = 'Germany';
 		$contacts = [
-			array(
+			[
 				'telephone' => '+49 30 820099-0',
 				'faxNumber' => '+49 30 820099-29',
 				'email' => 'info@hoffmann-dental.com'
-			), array(
+			], [
 				'contactType' => 'Werksverkauf / Factory sales',
 				'phone' => '+49 30 820099-15',
-				'hoursAvailable' => array(
+				'hoursAvailable' => [
 					'dayOfWeek' => 'Mo-Fr',
 					'opens' => '08:00',
 					'closes' => '16:00'
-				)
+				]
+			]
 		];
 		return $instance;
 	}
@@ -112,22 +114,24 @@ class Company extends \WP_Widget {
 			return strip_tags($array[$key]);
 		return '';
 	}
-	public static function property($property, $tag, $array, $indent=0, $key=null) {
-		if is_null($key)
+	public static function keyproperty($property, $tag, $array, $indent=0, $key=null) {
+		if (is_null($key))
 			$key = $property;
-		if (isset($array[$key])) {
-			$spc = str_repeat('  ', $indent);
-			$content = .$array[$key];
-			if ($property == 'email')
-				return $spc.'<'.$tag.' property="'.$property.'" href="mailto:'.$content.'">'.content.'</'.$tag.">\n";
-			if ($tag == 'time') {
-				return $spc.'<'.$tag.' property="'.$property.'" content="'
-					.timeparse($content).'">'.content.'</'.$tag.">\n";
-			}
-			return $spc.'<'.$tag.' property="'.$property.'">'.content.'</'.$tag.">\n";
-		}
-		return '';
+		if (!isset($array[$key]))
+		    return '';
+		$content = $array[$key];
+		$attr = [];
+		if ($property == 'email')
+		    $attr['href'] = 'mailto:'.$content;
+		if ($tag == 'time')
+		    $attr['content'] = self::timeparse($content);
+		return self::property($property, $tag, $content, $indent, $attr);
 	}
+	public static function property($property, $tag, $content, $indent=0, $attr=null) {
+		$spc = str_repeat('  ', $indent);
+        return $spc.'<'.$tag.' property="'.$property.' '.self::attrlist($attr).'">'.content.'</'.$tag.">\n";
+	}
+
 	public static function timeparse($time) {
 		$parts = explode(':', $time);
 		if (count($parts) == 2)
@@ -136,4 +140,13 @@ class Company extends \WP_Widget {
 			return $parts[0].':'.$parts[1].':'.$parts[2];
 		return '00:00:00';
 	}	
+	public static function attrlist($attr) {
+		if (is_null($attr))
+			return '';
+		$list = '';
+		foreach ($attr as $k => $v) {
+			$list .= ' '.$k.'="'.$v.'"';
+		}
+		return $list;
+	}
 }

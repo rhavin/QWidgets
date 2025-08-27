@@ -4,7 +4,7 @@ namespace Q\WPWidgets;
 /**
  * Plugin Name:        QWidgets
  * Plugin URI:         https://github.com/rhavin/QWidgets
- * Version:            0.0.11
+ * Version:            0.0.12
  * Description:        Description
  * Author:             rhavin
  * Author URI:         https://rhavin.de/
