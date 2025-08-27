@@ -1,8 +1,8 @@
 <?php
 
-namespace Q\WPWidgets\plugin;
+namespace Q\WPWidgets;
 
-class QWidgetsPlugin
+class Plugin
 {
     public function __construct(string $file)
     {

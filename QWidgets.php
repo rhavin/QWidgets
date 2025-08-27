@@ -4,7 +4,7 @@ namespace Q\WPWidgets;
 /**
  * Plugin Name:        QWidgets
  * Plugin URI:         https://github.com/rhavin/QWidgets
- * Version:            0.0.7
+ * Version:            0.0.8
  * Description:        Description
  * Author:             rhavin
  * Author URI:         https://rhavin.de/
@@ -20,6 +20,20 @@ namespace Q\WPWidgets;
 if (!defined('ABSPATH'))
 	exit;
 
-require_once 'autoloader.php';
-new QWidgetsPlugin(__FILE__);
+spl_autoload_register(function ($class)
+{
+	if (substr($class, 0, strlen(__NAMESPACE__ . '\\')) !== __NAMESPACE__ . '\\')
+		return;
+	$class = substr($class, strlen(__NAMESPACE__ . '\\'));
+	$class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
+	$class = dirname(__FILE__).'/src/'.$class .'.php';
+	if (!file_exists($class))
+	{
+		error_log('Class ['.$class.'] not found');
+		return;
+	}
+	require_once $class;
+});
+
+new Plugin(__FILE__);
 ?>

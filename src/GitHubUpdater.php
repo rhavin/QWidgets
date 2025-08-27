@@ -1,6 +1,6 @@
 <?php
 
-namespace Q\WPWidgets\plugin;
+namespace Q\WPWidgets;
 
 /**
 * Code from Ryan Sechrest
