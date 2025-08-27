@@ -30,28 +30,34 @@ class Company extends \WP_Widget {
 			.property('postalCode', 'span', $instance, 2)
 			.property('addressLocality', 'span', $instance, 2)
 			.property('addressCountry', 'span', $instance, 2);
-		if ($address != ''):
+		if ($address != '') {
 			echo '  <address property="address" typeof="PostalAddress">'."\n";
 			echo $address;
 			echo "  </address>\n";
-?>
-  <div class="corpContact" property="contactPoint" typeof="ContactPoint">
-    <span property="telephone">+49 30 820099-0</span>
-    <span property="faxNumber">+49 30 820099-29</span>
-    <a property="email" href="mailto:info@hoffmann-dental.com">info@hoffmann-dental.com</a>
-  </div>
-  <div class="corpContact" property="contactPoint" typeof="ContactPoint">
-    <h2 property="contactType">Werksverkauf / Factory sales</h2>
-    <span property="telephone">+49 30 820099-15</span>
-    <span property="hoursAvailable" typeof="OpeningHoursSpecification">
-      <span property="dayOfWeek">Mo-Fr</span>
-      <time property="opens" content="00:08:00">08:00</time> - <time property="closes" content="00:16:00">16:00</time>
-    </span>
-  </div>
-</div>
-<?php
+		}
+		foreach ($instance['contacts'] as $contact)  {
+			$html = property('contactType', 'h2', $contact, 4)
+				.property('telephone', 'span', $contact, 4)
+				.property('faxNumber', 'span', $contact, 4)
+				.property('email', 'a', $contact, 4);
+			if (isset($contact['hoursAvailable'])) {
+				$hours = $contact['hoursAvailable'];
+				$html .= "    <span property=\"hoursAvailable\" typeof=\"OpeningHoursSpecification\">\n";
+				$html .= property('dayOfWeek', 'span', $hours, 6);
+				$html .= property('opens', 'time', $hours, 6);
+				$html .= " - ";
+				$html .= property('closes', 'time', $hours, 6);
+				$html .= "    </span>\n";
+			}
+			if ($html != '') {
+				echo "  <div class=\"corpContact\" property=\"contactPoint\" typeof=\"ContactPoint\">\n";
+				echo $html;
+				echo "  </div>\n";
+			}
+		}
 		echo $after_widget;
 	}
+
 	/**
 	 * Back-end widget form.
 	 * @see WP_Widget::form()
@@ -85,6 +91,20 @@ class Company extends \WP_Widget {
 		$instance['postalCode'] = '12099';
 		$instance['addressLocality'] = 'Berlin';
 		$instance['addressCountry'] = 'Germany';
+		$contacts = [
+			array(
+				'telephone' => '+49 30 820099-0',
+				'faxNumber' => '+49 30 820099-29',
+				'email' => 'info@hoffmann-dental.com'
+			), array(
+				'contactType' => 'Werksverkauf / Factory sales',
+				'phone' => '+49 30 820099-15',
+				'hoursAvailable' => array(
+					'dayOfWeek' => 'Mo-Fr',
+					'opens' => '08:00',
+					'closes' => '16:00'
+				)
+		];
 		return $instance;
 	}
 	public static function strip($key, $array) {
@@ -97,8 +117,23 @@ class Company extends \WP_Widget {
 			$key = $property;
 		if (isset($array[$key])) {
 			$spc = str_repeat('  ', $indent);
-			return $spc.'<'.$tag.' property="'.$property.'">'.$array[$key].'</'.$tag.">\n";
+			$content = .$array[$key];
+			if ($property == 'email')
+				return $spc.'<'.$tag.' property="'.$property.'" href="mailto:'.$content.'">'.content.'</'.$tag.">\n";
+			if ($tag == 'time') {
+				return $spc.'<'.$tag.' property="'.$property.'" content="'
+					.timeparse($content).'">'.content.'</'.$tag.">\n";
+			}
+			return $spc.'<'.$tag.' property="'.$property.'">'.content.'</'.$tag.">\n";
 		}
 		return '';
 	}
+	public static function timeparse($time) {
+		$parts = explode(':', $time);
+		if (count($parts) == 2)
+			return '00:'.$parts[0].':'.$parts[1];
+		if (count($parts) == 3)
+			return $parts[0].':'.$parts[1].':'.$parts[2];
+		return '00:00:00';
+	}	
 }
