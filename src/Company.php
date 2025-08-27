@@ -63,15 +63,25 @@ class Company extends \WP_Widget {
 	 */
 	public function form($instance)
 	{
-		if (isset($instance['title']))
-			$title = $instance['title'];
-		else
-			$title = __('default title', 'text_domain');
-		?><p>
-			<label for="<?php echo $this->get_field_name( 'title' ); ?>"><?php _e('Title:'); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
-		</p><?php
+		$this->input('name', $instance);
+		$this->input('streetAddress', $instance);
+		$this->input('postalCode', $instance);
+		$this->input('addressLocality', $instance);
+		$this->input('addressCountry', $instance);
 		return ''; // to avoid warning: expected 'noform' or ''
+	}
+	public function input($property, $array)
+	{
+		if (isset($array[$property]))
+			$value = $array[$property];
+		else
+			$value = '';
+		echo self::inputfield(
+			$this->get_field_id($property),
+			$this->get_field_name($property),
+			$property,
+			esc_attr($value)
+		);
 	}
 	/**
 	 * Sanitize widget form values as they are saved.
@@ -145,5 +155,11 @@ class Company extends \WP_Widget {
 			$list .= ' '.$k.'="'.$v.'"';
 		}
 		return $list;
+	}
+	public static function inputfield($id, $name, $label, $value, $type='text', $size=100) {
+		return '<label for="'.$name.'">'.$label.':</label>'
+			.'<input class="widefat" id="'.$id.'" name="'.$name.'" type="'
+			.$text.'" value="'.$value.'" />';
+
 	}
 }
