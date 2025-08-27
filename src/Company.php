@@ -20,11 +20,36 @@ class Company extends \WP_Widget {
 	public function widget($args, $instance)
 	{
 		extract($args);
-		$title = apply_filters('widget_title', $instance['title']);
 		echo $before_widget;
-		if (! empty($title))
-			echo $before_title . $title . $after_title;
-		echo __( 'First working Plugin QWidget', 'text_domain' );
+		$vTitle = apply_filters('widget_title', $instance['title']);
+		if (!empty($vTitle))
+			$vTitle = $before_title . $vTitle . $after_title;
+		echo '<div class="corpAddress" vocab="https://schema.org/" typeof="Organization">'."\n";
+		echo property('name', 'h1', $instance, 1, 'title');
+		$address = property('streetAddress', 'span', $instance, 2)
+			.property('postalCode', 'span', $instance, 2)
+			.property('addressLocality', 'span', $instance, 2)
+			.property('addressCountry', 'span', $instance, 2);
+		if ($address != ''):
+			echo '  <address property="address" typeof="PostalAddress">'."\n";
+			echo $address;
+			echo "  </address>\n";
+?>
+  <div class="corpContact" property="contactPoint" typeof="ContactPoint">
+    <span property="telephone">+49 30 820099-0</span>
+    <span property="faxNumber">+49 30 820099-29</span>
+    <a property="email" href="mailto:info@hoffmann-dental.com">info@hoffmann-dental.com</a>
+  </div>
+  <div class="corpContact" property="contactPoint" typeof="ContactPoint">
+    <h2 property="contactType">Werksverkauf / Factory sales</h2>
+    <span property="telephone">+49 30 820099-15</span>
+    <span property="hoursAvailable" typeof="OpeningHoursSpecification">
+      <span property="dayOfWeek">Mo-Fr</span>
+      <time property="opens" content="00:08:00">08:00</time> - <time property="closes" content="00:16:00">16:00</time>
+    </span>
+  </div>
+</div>
+<?php
 		echo $after_widget;
 	}
 	/**
@@ -55,11 +80,25 @@ class Company extends \WP_Widget {
 	{
 		$instance = array();
 		$instance['title'] = self::strip('title', $new_instance);
+		$instance['title'] = 'Hoffmann Dental Manufaktur GmbH';
+		$instance['streetAddress'] = 'Komturstraße 58-62';
+		$instance['postalCode'] = '12099';
+		$instance['addressLocality'] = 'Berlin';
+		$instance['addressCountry'] = 'Germany';
 		return $instance;
 	}
 	public static function strip($key, $array) {
 		if (isset($array[$key]))
 			return strip_tags($array[$key]);
+		return '';
+	}
+	public static function property($property, $tag, $array, $indent=0, $key=null) {
+		if is_null($key)
+			$key = $property;
+		if (isset($array[$key])) {
+			$spc = str_repeat('  ', $indent);
+			return $spc.'<'.$tag.' property="'.$property.'">'.$array[$key].'</'.$tag.">\n";
+		}
 		return '';
 	}
 }

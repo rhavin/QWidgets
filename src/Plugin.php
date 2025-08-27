@@ -21,7 +21,7 @@ add_action( 'widgets_init', __NAMESPACE__ .'\\register_widgets' );
 
 function register_widgets() {
     try {
-      register_widget(__NAMESPACE__ .'Company');
+      register_widget(__NAMESPACE__ .'\\Company');
     } catch (\Exception $e) {
         error_log($e->getMessage());
     }
