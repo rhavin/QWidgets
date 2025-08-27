@@ -21,32 +21,29 @@ class Company extends \WP_Widget {
 	{
 		extract($args);
 		echo $before_widget;
-		$vTitle = apply_filters('widget_title', $instance['title']);
-		if (!empty($vTitle))
-			$vTitle = $before_title . $vTitle . $after_title;
 		echo '<div class="corpAddress" vocab="https://schema.org/" typeof="Organization">'."\n";
-		echo self::property('name', 'h1', $vTitle, 2);
-		$address = keyproperty('streetAddress', 'span', $instance, 2)
-			.self::keyproperty('postalCode', 'span', $instance, 2)
-			.self::keyproperty('addressLocality', 'span', $instance, 2)
+		echo self::keyproperty('name', 'h1', $instance, 2);
+		$address = self::keyproperty('streetAddress', 'span', $instance, 2).', '
+			.self::keyproperty('postalCode', 'span', $instance, 2).' '
+			.self::keyproperty('addressLocality', 'span', $instance, 2).', '
 			.self::keyproperty('addressCountry', 'span', $instance, 2);
 		if ($address != '') {
 			echo '  <address property="address" typeof="PostalAddress">'."\n";
 			echo $address;
 			echo "  </address>\n";
 		}
-/*		foreach ($instance['contacts'] as $contact)  {
-			$html = property('contactType', 'h2', $contact, 4)
-				.property('telephone', 'span', $contact, 4)
-				.property('faxNumber', 'span', $contact, 4)
-				.property('email', 'a', $contact, 4);
+		foreach ($instance['contacts'] as $contact)  {
+			$html = self::keyproperty('contactType', 'h2', $contact, 4)
+				.self::keyproperty('telephone', 'span', $contact, 4)
+				.self::keyproperty('faxNumber', 'span', $contact, 4)
+				.self::keyproperty('email', 'a', $contact, 4);
 			if (isset($contact['hoursAvailable'])) {
 				$hours = $contact['hoursAvailable'];
 				$html .= "    <span property=\"hoursAvailable\" typeof=\"OpeningHoursSpecification\">\n";
-				$html .= property('dayOfWeek', 'span', $hours, 6);
-				$html .= property('opens', 'time', $hours, 6);
+				$html .= self::keyproperty('dayOfWeek', 'span', $hours, 6);
+				$html .= self::keyproperty('opens', 'time', $hours, 6);
 				$html .= " - ";
-				$html .= property('closes', 'time', $hours, 6);
+				$html .= self::keyproperty('closes', 'time', $hours, 6);
 				$html .= "    </span>\n";
 			}
 			if ($html != '') {
@@ -54,7 +51,7 @@ class Company extends \WP_Widget {
 				echo $html;
 				echo "  </div>\n";
 			}
-		} */
+		}
 		echo "</div>\n";
 		echo $after_widget;
 	}
@@ -87,19 +84,19 @@ class Company extends \WP_Widget {
 	{
 		$instance = array();
 		$instance['title'] = self::strip('title', $new_instance);
-		$instance['title'] = 'Hoffmann Dental Manufaktur GmbH';
+		$instance['name'] = 'Hoffmann Dental Manufaktur GmbH';
 		$instance['streetAddress'] = 'Komturstraße 58-62';
 		$instance['postalCode'] = '12099';
 		$instance['addressLocality'] = 'Berlin';
 		$instance['addressCountry'] = 'Germany';
-		$contacts = [
+		$instance['contacts'] = [
 			[
 				'telephone' => '+49 30 820099-0',
 				'faxNumber' => '+49 30 820099-29',
 				'email' => 'info@hoffmann-dental.com'
 			], [
 				'contactType' => 'Werksverkauf / Factory sales',
-				'phone' => '+49 30 820099-15',
+				'telephone' => '+49 30 820099-15',
 				'hoursAvailable' => [
 					'dayOfWeek' => 'Mo-Fr',
 					'opens' => '08:00',
@@ -129,7 +126,7 @@ class Company extends \WP_Widget {
 	}
 	public static function property($property, $tag, $content, $indent=0, $attr=null) {
 		$spc = str_repeat('  ', $indent);
-        return $spc.'<'.$tag.' property="'.$property.' '.self::attrlist($attr).'">'.content.'</'.$tag.">\n";
+        return $spc.'<'.$tag.' property="'.$property.' '.self::attrlist($attr).'">'.$content.'</'.$tag.">\n";
 	}
 
 	public static function timeparse($time) {
