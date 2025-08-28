@@ -5,11 +5,13 @@ namespace Q\WPWidgets;
  */
 class Company extends \WP_Widget {
 	public function __construct() {
-		parent::__construct(
-			'company_widget', // Base ID
-			'QCompany', // Name
-			array( 'description' => __( 'Company Contact', 'text_domain' ) )
+		$id_base = 'company_widget';
+		$name    = 'QCompany';
+		$wid_options = array(
+			'classname'   => 'company_widget',
+			'description' => __( 'Company Contact', 'text_domain' )
 		);
+		parent::__construct($id_base, $name, $wid_options);
 	}
 	/**
 	 * Front-end display of widget.
