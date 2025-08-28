@@ -21,6 +21,9 @@ class Company extends \WP_Widget {
 	 */
 	public function widget($args, $instance)
 	{
+		if (empty($instance)) {
+			$instance = $this->toDefault();
+		}
 		extract($args);
 		echo $before_widget;
 		echo '<div class="corpAddress" vocab="https://schema.org/" typeof="Organization">'."\n";
@@ -84,6 +87,27 @@ class Company extends \WP_Widget {
 			$property,
 			esc_attr($value)
 		);
+	}
+	public function toDefault() {
+		$instance = array();
+		$instance['title'] = 'QCormpany';
+		$instance['name'] = 'Acme GmbH';
+		$instance['streetAddress'] = 'Am Acker 1-15';
+		$instance['postalCode'] = '12345';
+		$instance['addressLocality'] = 'Berlin';
+		$instance['addressCountry'] = 'Germany';
+		$instance['contacts'] = [
+			'contactType' => 'General Manager',
+			'telephone' => '+49 30 1234567-0',
+			'faxNumber' => '+49 30 1234567-9',
+			'email' => 'noreply@example.com'
+			'hoursAvailable' => [
+				'dayOfWeek' => 'Mo-Fr',
+				'opens' => '08:00',
+				'closes' => '16:00'
+			]
+		];
+		return $instance;
 	}
 	/**
 	 * Sanitize widget form values as they are saved.

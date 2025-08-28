@@ -14,6 +14,9 @@ class Plugin
             ->setChangelog('CHANGELOG.md')
             ->enableSetting()
             ->add();
+
+		// tag, function_callback
+		add_shortcode('qwidget', 'qwidget');
     }
 }
 
@@ -27,30 +30,45 @@ function register_widgets() {
     }
 }
 
-function qwidget($atts) {
+function qwidget($atts, $content = null) {
 	global $wp_widget_factory;
 	$parameters = shortcode_atts(array(
 		'name' => false,
 		'class' => false,
 		'instance' => array(),
 		'id' => false
-	), $atts);
-	$name = esc_html($parameters->$name);
-	if (!is_a($wp_widget_factory->widgets[$name], 'WP_Widget')) {
-		$wp_class = 'WP_Widget_'.ucwords(strtolower($parameters->$class));
-		if (!is_a($wp_widget_factory->widgets[$wp_class], 'WP_Widget')) {
-			$message = sprintf(__('[%s]: Widget class not found.'), $class);
-			return '<p>'. $message .'</p>';
-		} else {
-			$class = $wp_class;
-		}
+	), $atts,'qwidget');
+	$name = esc_html($parameters['name']);
+	$wgclass = esc_html($parameters['class']);
+	if (!$name && !$wgclass) {
+		return '<p>'. __('QWidget: Widget name ['.$name.'] or class ['.$wgclass.'] not specified.') .'</p>';
 	}
-	if (!$parameters->id)
-		$parameters->id = 'QPWGT' . rand(1000,9999);
+	if ($wgclass)
+		$name = $wgclass;
+	else {
+		// find class by name
+		$output = '';
+		foreach ($wp_widget_factory->widgets as $class => $obj) {
+			if ($obj->name !== $name)
+				continue;
+			foreach($obj as $k => $v) {
+				$output .= '['.$k.']';
+			}
+			$name = $class;
+			break;
+		}
+		return $output;
+	}
+	if (!$name) {
+		$message = sprintf(__('[%s]: Widget class not found.'), $wgclass);
+		return '<p>'. $message .'</p>';
+	}
+	if (!$parameters['id'])
+		$parameters['id'] = 'QPWGT' . rand(1000,9999);
 	ob_start();
-	the_widget($name, $parameters->instance,
+	the_widget($name, $parameters['instance'],
 		array(
-			'widget_id' => $parameters->id,
+			'widget_id' => $parameters['id'],
 			'before_widget' => '',
 			'after_widget' => '',
 			'before_title' => '',
@@ -61,7 +79,5 @@ function qwidget($atts) {
 	ob_end_clean();
 	return $output;
 }
-// tag, function_callback
-add_shortcode('qwidget', 'qwidget');
 
 ?>
