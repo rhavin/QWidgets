@@ -39,8 +39,8 @@ class Company extends \WP_Widget {
 		}
 		foreach ($instance['contacts'] as $contact)  {
 			$html = self::keyproperty('contactType', 'h2', $contact, 4)
-				.self::keyproperty('telephone', 'span', $contact, 4)
-				.self::keyproperty('faxNumber', 'span', $contact, 4)
+				.self::keyproperty('telephone', 'span', $contact, 4, null, '☏: ')
+				.self::keyproperty('faxNumber', 'span', $contact, 4, null, '🖷: ')
 				.self::keyproperty('email', 'a', $contact, 4);
 			if (isset($contact['hoursAvailable'])) {
 				$hours = $contact['hoursAvailable'];
@@ -147,7 +147,7 @@ class Company extends \WP_Widget {
 			return strip_tags($array[$key]);
 		return '';
 	}
-	public static function keyproperty($property, $tag, $array, $indent=0, $key=null) {
+	public static function keyproperty($property, $tag, $array, $indent=0, $key=null, $prefix='', $postfix='') {
 		if (is_null($key))
 			$key = $property;
 		if (!isset($array[$key]))
@@ -158,7 +158,7 @@ class Company extends \WP_Widget {
 		    $attr['href'] = 'mailto:'.$content;
 		if ($tag == 'time')
 		    $attr['content'] = self::timeparse($content);
-		return self::property($property, $tag, $content, $indent, $attr);
+		return self::property($property, $tag, $prefix.$content.$postfix, $indent, $attr);
 	}
 	public static function property($property, $tag, $content, $indent=0, $attr=null) {
 		$spc = str_repeat('  ', $indent);

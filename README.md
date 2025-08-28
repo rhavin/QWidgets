@@ -1,1 +1,3 @@
-Nothing to see here right now
+Wordpress-Plugin with widgets:
+
+QCompany:   Microdata (RDF/a) friendly company address
