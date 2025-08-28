@@ -100,7 +100,7 @@ class Company extends \WP_Widget {
 			'contactType' => 'General Manager',
 			'telephone' => '+49 30 1234567-0',
 			'faxNumber' => '+49 30 1234567-9',
-			'email' => 'noreply@example.com'
+			'email' => 'noreply@example.com',
 			'hoursAvailable' => [
 				'dayOfWeek' => 'Mo-Fr',
 				'opens' => '08:00',

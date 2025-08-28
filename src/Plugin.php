@@ -16,7 +16,7 @@ class Plugin
             ->add();
 
 		// tag, function_callback
-		add_shortcode('qwidget', 'qwidget');
+		add_shortcode('qwidget', __NAMESPACE__ .'\\qwidget');
     }
 }
 
@@ -47,17 +47,12 @@ function qwidget($atts, $content = null) {
 		$name = $wgclass;
 	else {
 		// find class by name
-		$output = '';
 		foreach ($wp_widget_factory->widgets as $class => $obj) {
 			if ($obj->name !== $name)
 				continue;
-			foreach($obj as $k => $v) {
-				$output .= '['.$k.']';
-			}
 			$name = $class;
 			break;
 		}
-		return $output;
 	}
 	if (!$name) {
 		$message = sprintf(__('[%s]: Widget class not found.'), $wgclass);
