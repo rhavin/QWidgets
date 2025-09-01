@@ -74,19 +74,41 @@ class Company extends \WP_Widget {
 		$this->input('postalCode', $instance);
 		$this->input('addressLocality', $instance);
 		$this->input('addressCountry', $instance);
+		$this->input('addressCountry', $instance);
+		$cid = 0;
+		foreach ($instance['contacts'] as $contact)  {
+			echo '<hr><strong>Contact #'.($cid).'</strong><br>';
+			$this->input('contactType', $contact);
+			$this->input('telephone', $contact);
+			$this->input('faxNumber', $contact);
+			$this->input('email', $contact);
+			if (isset($contact['hoursAvailable'])) {
+				$hours = $contact['hoursAvailable'];
+				$this->input('dayOfWeek', $hours);
+				$this->input('opens', $hours, 'time');
+				$this->input('closes', $hours, 'time');
+			}
+			++$cid;
+		}
+
 		return ''; // to avoid warning: expected 'noform' or ''
 	}
-	public function input($property, $array)
+	public function input($property, $array, $type='text')
 	{
 		if (isset($array[$property]))
 			$value = $array[$property];
-		else
-			$value = '';
+		else {
+			if $type == 'number'
+				$value = 0;
+			else
+				$value = '';
+		}
 		echo \Q\Tools\HTML::inputfield(
 			$this->get_field_id($property),
 			$this->get_field_name($property),
 			$property,
-			esc_attr($value)
+			esc_attr($value),
+			$type
 		);
 	}
 	public function toDefault() {
@@ -147,5 +169,10 @@ class Company extends \WP_Widget {
 		if (isset($array[$key]))
 			return strip_tags($array[$key]);
 		return '';
+	}
+	public static function getValue($key, $array, $default = null)
+	{	if (isset($array[$key]))
+			return $array[$key];
+		return $default;
 	}
 }
