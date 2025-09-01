@@ -88,12 +88,14 @@ class Company extends \WP_Widget {
 				$this->input('opens', $hours, 'time');
 				$this->input('closes', $hours, 'time');
 			}
+			$this->input('remove_'.$cid, $instance, 'remove this contact', 'checkbox');
 			++$cid;
 		}
+		$this->input('add_'.$cid, $instance, 'add new contact', 'checkbox');
 
 		return ''; // to avoid warning: expected 'noform' or ''
 	}
-	public function input($property, $array, $type='text')
+	public function input($property, $array, $label = null, $type='text')
 	{
 		if (isset($array[$property]))
 			$value = $array[$property];
@@ -103,10 +105,12 @@ class Company extends \WP_Widget {
 			else
 				$value = '';
 		}
+		if (isnull($label)
+			$label = $property;
 		echo \Q\Tools\HTML::inputfield(
 			$this->get_field_id($property),
 			$this->get_field_name($property),
-			$property,
+			$label,
 			esc_attr($value),
 			$type
 		);
