@@ -74,9 +74,9 @@ class Company extends \WP_Widget {
 		$this->input('postalCode', $instance);
 		$this->input('addressLocality', $instance);
 		$this->input('addressCountry', $instance);
-		$this->input('addressCountry', $instance);
 		$cid = 0;
-		foreach ($instance['contacts'] as $contact)  {
+		
+		foreach (self::getValue('contacts', $instance, array()) as $contact)  {
 			echo '<hr><strong>Contact #'.($cid).'</strong><br>';
 			$this->input('contactType', $contact);
 			$this->input('telephone', $contact);
@@ -105,7 +105,7 @@ class Company extends \WP_Widget {
 			else
 				$value = '';
 		}
-		if (isnull($label)
+		if (isnull($label))
 			$label = $property;
 		echo \Q\Tools\HTML::inputfield(
 			$this->get_field_id($property),
