@@ -69,6 +69,9 @@ class Company extends \WP_Widget {
 	 */
 	public function form($instance)
 	{
+		if (empty($instance)) {
+			$instance = $this->toDefault();
+		}
 		$this->input('name', $instance);
 		$this->input('streetAddress', $instance);
 		$this->input('postalCode', $instance);
@@ -105,7 +108,7 @@ class Company extends \WP_Widget {
 			else
 				$value = '';
 		}
-		if (isnull($label))
+		if (is_null($label))
 			$label = $property;
 		echo \Q\Tools\HTML::inputfield(
 			$this->get_field_id($property),
