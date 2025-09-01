@@ -98,7 +98,7 @@ class Company extends \WP_Widget {
 		if (isset($array[$property]))
 			$value = $array[$property];
 		else {
-			if $type == 'number'
+			if ($type == 'number')
 				$value = 0;
 			else
 				$value = '';
