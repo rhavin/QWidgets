@@ -4,16 +4,16 @@ namespace Q;
 /**
  * Plugin Name:        QWidgets
  * Plugin URI:         https://github.com/rhavin/QWidgets
- * Version:            0.0.24
- * Description:        Description
+ * Version:            0.0.26
+ * Description:        RDF/a aware Widgets for Classicpress and Wordpress 
  * Author:             rhavin
  * Author URI:         https://rhavin.de/
  * Text Domain:        QWidgets
  * Tested up to:       6.8.2
- * Requires at least:  6.5
+ * Requires at least:  6.2.5
  * Requires PHP:       8.1
  * Update URI:         https://github.com/rhavin/QWidgets
- * License:            none
+ * License:            Still in dev, use at own risk.
  * License URI:        none
  */
 
