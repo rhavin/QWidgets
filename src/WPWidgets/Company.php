@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.16
+// Version 0.1.17
 
 /**
  * Adds Company widget.
@@ -87,28 +87,29 @@ class Company extends \WP_Widget {
 		$this->input('addressLocality', $instance);
 		$this->input('addressCountry', $instance);
 		$cid = 0;
-		
-		foreach (self::getValue('contacts', $instance, array()) as $contact)  {
-			echo '<hr><strong>Contact #'.($cid).'</strong><br>';
-			$this->input('contactType', $contact);
-			$this->input('telephone', $contact);
-			$this->input('faxNumber', $contact);
-			$this->input('email', $contact);
-			if (array_key_exists('hoursAvailable', $contact)) {
-				$hours = $contact['hoursAvailable'];
-				$this->input('dayOfWeek', $hours);
-				$this->input('opens', $hours, 'time');
-				$this->input('closes', $hours, 'time');
+		if (array_key_exists('contacts', $instance)) {
+			foreach ($instance['contacts'] as $contact) {
+				echo '<hr><strong>Contact #'.$cid.'</strong><br>';
+				$this->input('contactType', $contact);
+				$this->input('telephone', $contact);
+				$this->input('faxNumber', $contact);
+				$this->input('email', $contact);
+				if (is_array($contact) && array_key_exists('hoursAvailable', $contact)) {
+					$hours = $contact['hoursAvailable'];
+					$this->input('dayOfWeek', $hours);
+					$this->input('opens', $hours, 'time');
+					$this->input('closes', $hours, 'time');
+				}
+				$this->input('remove_'.$cid, $instance, 'remove this contact', 'checkbox');
+				++$cid;
 			}
-			$this->input('remove_'.$cid, $instance, 'remove this contact', 'checkbox');
-			++$cid;
 		}
 		$this->input('add_'.$cid, $instance, 'add new contact', 'checkbox');
 	}
 	public function input($property, $array, $label = null, $type='text')
 	{
 		$value = '';
-		if (array_key_exists($property, $array))
+		if (is_array($array) && array_key_exists($property, $array))
 			$value = $array[$property];
 		else {
 			if ($type == 'number')
@@ -160,7 +161,7 @@ class Company extends \WP_Widget {
 		$instance['streetAddress']   = self::strip('streetAddress', $new_instance);
 		$instance['postalCode']      = self::strip('postalCode', $new_instance);
 		$instance['addressLocality'] = self::strip('addressLocality', $new_instance);
-		$instance['addressCountry']  = self::strip('addressCountry', $new_instance); */
+		$instance['addressCountry']  = self::strip('addressCountry', $new_instance);
 		$instance['contacts'] = [
 			[
 				'telephone' => '+49 30 820099-0',
@@ -187,7 +188,8 @@ class Company extends \WP_Widget {
 		return '';
 	}
 	public static function getValue($key, $array, $default = null)
-	{	if (array_key_exists($key, $array))
+	{
+		if (is_array($array) && array_key_exists($key, $array))
 			return $array[$key];
 		return $default;
 	}
