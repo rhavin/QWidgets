@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.10
+// Version 0.1.11
 
 /**
  * Adds Company widget.
@@ -125,12 +125,12 @@ class Company extends \WP_Widget {
 	}
 	public function toDefault() {
 		$instance = array();
-		$instance['title'] = 'QCormpany';
-		$instance['name'] = 'Acme GmbH';
-		$instance['streetAddress'] = 'Am Acker 1-15';
-		$instance['postalCode'] = '12345';
+		$instance['title']           = 'QCormpany';
+		$instance['name']            = 'Acme GmbH';
+		$instance['streetAddress']   = 'Am Acker 1-15';
+		$instance['postalCode']      = '12345';
 		$instance['addressLocality'] = 'Berlin';
-		$instance['addressCountry'] = 'Germany';
+		$instance['addressCountry']  = 'Germany';
 /*		$instance['contacts'] = [
 			'contactType' => 'General Manager',
 			'telephone' => '+49 30 1234567-0',
@@ -154,12 +154,12 @@ class Company extends \WP_Widget {
 	public function update($new_instance, $old_instance)
 	{
 		$instance = array();
-		$instance['title'] = 'QCormpany';
-		$instance['name'] = 'Hoffmann Dental Manufaktur GmbH';
-		$instance['streetAddress'] = 'Komturstraße 58-62';
-		$instance['postalCode'] = self::strip('postalCode', $new_instance);
+		$instance['title']           = 'QCormpany';
+		$instance['name']            = self::strip('name', $new_instance);
+		$instance['streetAddress']   = self::strip('streetAddress', $new_instance);
+		$instance['postalCode']      = self::strip('postalCode', $new_instance);
 		$instance['addressLocality'] = self::strip('addressLocality', $new_instance);
-		$instance['addressCountry'] = 'Germany';
+		$instance['addressCountry']  = self::strip('addressCountry', $new_instance);;
 	/*	$instance['contacts'] = [
 			[
 				'telephone' => '+49 30 820099-0',
