@@ -79,7 +79,7 @@ class Company extends \WP_Widget {
 		$this->input('addressCountry', $instance);
 		$cid = 0;
 		
-		foreach (self::getValue('contacts', $instance, array()) as $contact)  {
+	/*	foreach (self::getValue('contacts', $instance, array()) as $contact)  {
 			echo '<hr><strong>Contact #'.($cid).'</strong><br>';
 			$this->input('contactType', $contact);
 			$this->input('telephone', $contact);
@@ -93,7 +93,7 @@ class Company extends \WP_Widget {
 			}
 			$this->input('remove_'.$cid, $instance, 'remove this contact', 'checkbox');
 			++$cid;
-		}
+		} */
 		$this->input('add_'.$cid, $instance, 'add new contact', 'checkbox');
 
 		return ''; // to avoid warning: expected 'noform' or ''
