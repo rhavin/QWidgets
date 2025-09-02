@@ -1,5 +1,6 @@
 <?php
 namespace Q\WPWidgets;
+// Version 0.1.10
 
 class Plugin
 {

@@ -1,5 +1,6 @@
 <?php
 namespace Q\WPWidgets;
+// Version 0.1.10
 
 /**
  * Adds Company widget.
@@ -8,11 +9,17 @@ class Company extends \WP_Widget {
 	public function __construct() {
 		$id_base = 'company_widget';
 		$name    = 'QCompany';
-		$wid_options = array(
-			'classname'   => 'company_widget',
-			'description' => __( 'Company Contact', 'text_domain' )
+		$$wid_options = array(
+			'classname'                   => $id_base,
+			'description'                 => __( 'Company Contact', 'text_domain' ),
+			'customize_selective_refresh' => true,
+			'show_instance_in_rest'       => true,
 		);
-		parent::__construct($id_base, $name, $wid_options);
+		$ctl_options = array(
+			'width'  => 400,
+			'height' => 350,
+		);
+		parent::__construct($id_base, $name, $wid_options, $ctl_options);
 	}
 	/**
 	 * Front-end display of widget.
@@ -25,8 +32,7 @@ class Company extends \WP_Widget {
 		if (empty($instance)) {
 			$instance = $this->toDefault();
 		}
-		extract($args);
-		echo $before_widget;
+		echo $args['before_widget']."\n";
 		echo '<div class="corpAddress" vocab="https://schema.org/" typeof="Organization">'."\n";
 		echo \Q\Tools\HTML::keyproperty('name', 'h1', $instance, 2);
 		$address = \Q\Tools\HTML::keyproperty('streetAddress', 'span', $instance, 2).', '
@@ -38,7 +44,7 @@ class Company extends \WP_Widget {
 			echo $address;
 			echo "  </address>\n";
 		}
-		foreach ($instance['contacts'] as $contact)  {
+/*		foreach ($instance['contacts'] as $contact)  {
 			$html = \Q\Tools\HTML::keyproperty('contactType', 'h2', $contact, 4)
 				.\Q\Tools\HTML::keyproperty('telephone', 'span', $contact, 4, null, '☏: ')
 				.\Q\Tools\HTML::keyproperty('faxNumber', 'span', $contact, 4, null, '🖷: ')
@@ -57,9 +63,8 @@ class Company extends \WP_Widget {
 				echo $html;
 				echo "  </div>\n";
 			}
-		}
-		echo "</div>\n";
-		echo $after_widget;
+		} */
+		echo "</div>\n".$args['after_widget'];
 	}
 
 	/**

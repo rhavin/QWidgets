@@ -1,4 +1,5 @@
 <?php
+// Version 0.1.10
 
 namespace Q\Tools;
 class HTML {
@@ -10,7 +11,7 @@ class HTML {
 		$content = $array[$key];
 		$attr = [];
 		if ($property == 'email')
-		    $attr['href'] = 'mailto:'.$content;
+		    $attr['href'] = 'mailto:'.esc_attr($content);
 		if ($tag == 'time')
 		    $attr['content'] = self::timeparse($content);
 		return self::property($property, $tag, $prefix.$content.$postfix, $indent, $attr);
@@ -18,7 +19,7 @@ class HTML {
 
 	public static function property($property, $tag, $content, $indent=0, $attr=null) {
 		$spc = str_repeat('  ', $indent);
-		return $spc.'<'.$tag.' property="'.$property.' '.self::attrlist($attr).'">'.$content.'</'.$tag.">\n";
+		return $spc.'<'.$tag.' property="'.esc_attr($property).' '.self::attrlist($attr).'">'.$content.'</'.$tag.">\n";
 	}
 
 	public static function timeparse($time) {
