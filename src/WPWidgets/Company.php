@@ -126,7 +126,7 @@ class Company extends \WP_Widget {
 		$instance['postalCode'] = '12345';
 		$instance['addressLocality'] = 'Berlin';
 		$instance['addressCountry'] = 'Germany';
-		$instance['contacts'] = [
+/*		$instance['contacts'] = [
 			'contactType' => 'General Manager',
 			'telephone' => '+49 30 1234567-0',
 			'faxNumber' => '+49 30 1234567-9',
@@ -136,8 +136,8 @@ class Company extends \WP_Widget {
 				'opens' => '08:00',
 				'closes' => '16:00'
 			]
-		];
-		return $instance;
+		]; */
+		return $instance; 
 	}
 	/**
 	 * Sanitize widget form values as they are saved.
@@ -155,7 +155,7 @@ class Company extends \WP_Widget {
 		$instance['postalCode'] = self::strip('postalCode', $new_instance);
 		$instance['addressLocality'] = self::strip('addressLocality', $new_instance);
 		$instance['addressCountry'] = 'Germany';
-		$instance['contacts'] = [
+	/*	$instance['contacts'] = [
 			[
 				'telephone' => '+49 30 820099-0',
 				'faxNumber' => '+49 30 820099-29',
@@ -169,7 +169,7 @@ class Company extends \WP_Widget {
 					'closes' => '16:00'
 				]
 			]
-		];
+		]; */
 		return $instance;
 	}
 	public static function strip($key, $array) {
