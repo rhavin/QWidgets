@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.13
+// Version 0.1.15
 
 /**
  * Adds Company widget.
@@ -79,6 +79,7 @@ class Company extends \WP_Widget {
 			if (empty($instance))
 				$instance = $this->toDefault();
 		}
+		$this->input('title', $instance);
 		$this->input('name', $instance);
 		$this->input('streetAddress', $instance);
 		$this->input('postalCode', $instance);
@@ -156,12 +157,12 @@ class Company extends \WP_Widget {
 	{
 //		$instance = array();
 		$old_instance['title']           = 'QCompany';
-		$old_instance['name']            = self::strip('name', $new_instance);
+	/*	$old_instance['name']            = self::strip('name', $new_instance);
 		$old_instance['streetAddress']   = self::strip('streetAddress', $new_instance);
 		$old_instance['postalCode']      = self::strip('postalCode', $new_instance);
 		$old_instance['addressLocality'] = self::strip('addressLocality', $new_instance);
-		$old_instance['addressCountry']  = self::strip('addressCountry', $new_instance);
-		$this->save_settings($old_instance);
+		$old_instance['addressCountry']  = self::strip('addressCountry', $new_instance); */
+		$this->save_settings($old_instance); 
 	/*	$instance['contacts'] = [
 			[
 				'telephone' => '+49 30 820099-0',
