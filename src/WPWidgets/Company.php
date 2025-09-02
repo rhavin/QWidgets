@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.11
+// Version 0.1.12
 
 /**
  * Adds Company widget.
@@ -9,7 +9,7 @@ class Company extends \WP_Widget {
 	public function __construct() {
 		$id_base = 'company_widget';
 		$name    = 'QCompany';
-		$$wid_options = array(
+		$wid_options = array(
 			'classname'                   => $id_base,
 			'description'                 => __( 'Company Contact', 'text_domain' ),
 			'customize_selective_refresh' => true,
