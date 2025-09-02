@@ -1,5 +1,5 @@
 <?php
-// Version 0.1.10
+// Version 0.1.13
 
 namespace Q\Tools;
 class HTML {
@@ -42,7 +42,7 @@ class HTML {
 	}
 
 	public static function inputfield($id, $name, $label, $value, $type='text', $size=100) {
-		return '<label for="'.$name.'">'.$label.':</label>'
+		return '<label for="'.$id.'">'.$label.':</label>'
 			.'<input class="widefat" id="'.$id.'" name="'.$name.'" type="'
 			.$type.'" value="'.$value.'" />';
 	}

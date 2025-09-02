@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.12
+// Version 0.1.13
 
 /**
  * Adds Company widget.
@@ -8,7 +8,7 @@ namespace Q\WPWidgets;
 class Company extends \WP_Widget {
 	public function __construct() {
 		$id_base = 'company_widget';
-		$name    = 'QCompany';
+		$name    = 'qcompany';
 		$wid_options = array(
 			'classname'                   => $id_base,
 			'description'                 => __( 'Company Contact', 'text_domain' ),
@@ -75,7 +75,9 @@ class Company extends \WP_Widget {
 	public function form($instance)
 	{
 		if (empty($instance)) {
-			$instance = $this->toDefault();
+			$this->get_settings($instance);
+			if (empty($instance))
+				$instance = $this->toDefault();
 		}
 		$this->input('name', $instance);
 		$this->input('streetAddress', $instance);
@@ -101,17 +103,16 @@ class Company extends \WP_Widget {
 		} */
 		$this->input('add_'.$cid, $instance, 'add new contact', 'checkbox');
 
-		return ''; // to avoid warning: expected 'noform' or ''
+		// return ''; // to avoid warning: expected 'noform' or ''
 	}
 	public function input($property, $array, $label = null, $type='text')
 	{
+		$value = '';
 		if (array_key_exists($property, $array))
 			$value = $array[$property];
 		else {
 			if ($type == 'number')
 				$value = 0;
-			else
-				$value = '';
 		}
 		if (is_null($label))
 			$label = $property;
@@ -153,13 +154,14 @@ class Company extends \WP_Widget {
 	 */
 	public function update($new_instance, $old_instance)
 	{
-		$instance = array();
-		$instance['title']           = 'QCormpany';
-		$instance['name']            = self::strip('name', $new_instance);
-		$instance['streetAddress']   = self::strip('streetAddress', $new_instance);
-		$instance['postalCode']      = self::strip('postalCode', $new_instance);
-		$instance['addressLocality'] = self::strip('addressLocality', $new_instance);
-		$instance['addressCountry']  = self::strip('addressCountry', $new_instance);;
+//		$instance = array();
+		$old_instance['title']           = 'QCompany';
+		$old_instance['name']            = self::strip('name', $new_instance);
+		$old_instance['streetAddress']   = self::strip('streetAddress', $new_instance);
+		$old_instance['postalCode']      = self::strip('postalCode', $new_instance);
+		$old_instance['addressLocality'] = self::strip('addressLocality', $new_instance);
+		$old_instance['addressCountry']  = self::strip('addressCountry', $new_instance);
+		$this->save_settings($old_instance);
 	/*	$instance['contacts'] = [
 			[
 				'telephone' => '+49 30 820099-0',
@@ -175,7 +177,7 @@ class Company extends \WP_Widget {
 				]
 			]
 		]; */
-		return $instance;
+		return $old_instance;
 	}
 	public static function strip($key, $array) {
 		if (array_key_exists($key, $array))
