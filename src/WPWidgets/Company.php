@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.15
+// Version 0.1.16
 
 /**
  * Adds Company widget.
@@ -44,7 +44,7 @@ class Company extends \WP_Widget {
 			echo $address;
 			echo "  </address>\n";
 		}
-/*		foreach ($instance['contacts'] as $contact)  {
+		foreach ($instance['contacts'] as $contact)  {
 			$html = \Q\Tools\HTML::keyproperty('contactType', 'h2', $contact, 4)
 				.\Q\Tools\HTML::keyproperty('telephone', 'span', $contact, 4, null, '☏: ')
 				.\Q\Tools\HTML::keyproperty('faxNumber', 'span', $contact, 4, null, '🖷: ')
@@ -63,7 +63,7 @@ class Company extends \WP_Widget {
 				echo $html;
 				echo "  </div>\n";
 			}
-		} */
+		}
 		echo "</div>\n".$args['after_widget'];
 	}
 
@@ -79,6 +79,7 @@ class Company extends \WP_Widget {
 			if (empty($instance))
 				$instance = $this->toDefault();
 		}
+		// title is currenty mandatory as an input field, because else widget.js breaks
 		$this->input('title', $instance);
 		$this->input('name', $instance);
 		$this->input('streetAddress', $instance);
@@ -87,7 +88,7 @@ class Company extends \WP_Widget {
 		$this->input('addressCountry', $instance);
 		$cid = 0;
 		
-	/*	foreach (self::getValue('contacts', $instance, array()) as $contact)  {
+		foreach (self::getValue('contacts', $instance, array()) as $contact)  {
 			echo '<hr><strong>Contact #'.($cid).'</strong><br>';
 			$this->input('contactType', $contact);
 			$this->input('telephone', $contact);
@@ -101,10 +102,8 @@ class Company extends \WP_Widget {
 			}
 			$this->input('remove_'.$cid, $instance, 'remove this contact', 'checkbox');
 			++$cid;
-		} */
+		}
 		$this->input('add_'.$cid, $instance, 'add new contact', 'checkbox');
-
-		// return ''; // to avoid warning: expected 'noform' or ''
 	}
 	public function input($property, $array, $label = null, $type='text')
 	{
@@ -133,7 +132,7 @@ class Company extends \WP_Widget {
 		$instance['postalCode']      = '12345';
 		$instance['addressLocality'] = 'Berlin';
 		$instance['addressCountry']  = 'Germany';
-/*		$instance['contacts'] = [
+		$instance['contacts'] = [
 			'contactType' => 'General Manager',
 			'telephone' => '+49 30 1234567-0',
 			'faxNumber' => '+49 30 1234567-9',
@@ -143,7 +142,7 @@ class Company extends \WP_Widget {
 				'opens' => '08:00',
 				'closes' => '16:00'
 			]
-		]; */
+		];
 		return $instance; 
 	}
 	/**
@@ -155,15 +154,14 @@ class Company extends \WP_Widget {
 	 */
 	public function update($new_instance, $old_instance)
 	{
-//		$instance = array();
-		$old_instance['title']           = 'QCompany';
-	/*	$old_instance['name']            = self::strip('name', $new_instance);
-		$old_instance['streetAddress']   = self::strip('streetAddress', $new_instance);
-		$old_instance['postalCode']      = self::strip('postalCode', $new_instance);
-		$old_instance['addressLocality'] = self::strip('addressLocality', $new_instance);
-		$old_instance['addressCountry']  = self::strip('addressCountry', $new_instance); */
-		$this->save_settings($old_instance); 
-	/*	$instance['contacts'] = [
+		$instance = array();
+		$instance['title']           = 'QCompany';
+		$instance['name']            = self::strip('name', $new_instance);
+		$instance['streetAddress']   = self::strip('streetAddress', $new_instance);
+		$instance['postalCode']      = self::strip('postalCode', $new_instance);
+		$instance['addressLocality'] = self::strip('addressLocality', $new_instance);
+		$instance['addressCountry']  = self::strip('addressCountry', $new_instance); */
+		$instance['contacts'] = [
 			[
 				'telephone' => '+49 30 820099-0',
 				'faxNumber' => '+49 30 820099-29',
@@ -177,7 +175,10 @@ class Company extends \WP_Widget {
 					'closes' => '16:00'
 				]
 			]
-		]; */
+		];
+		// save into options on customizer
+		if ($this->is_preview())
+			$this->save_settings($instance);
 		return $old_instance;
 	}
 	public static function strip($key, $array) {
