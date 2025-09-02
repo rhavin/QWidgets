@@ -85,7 +85,7 @@ class Company extends \WP_Widget {
 			$this->input('telephone', $contact);
 			$this->input('faxNumber', $contact);
 			$this->input('email', $contact);
-			if (isset($contact['hoursAvailable'])) {
+			if (array_key_exists('hoursAvailable', $contact)) {
 				$hours = $contact['hoursAvailable'];
 				$this->input('dayOfWeek', $hours);
 				$this->input('opens', $hours, 'time');
@@ -100,7 +100,7 @@ class Company extends \WP_Widget {
 	}
 	public function input($property, $array, $label = null, $type='text')
 	{
-		if (isset($array[$property]))
+		if (array_key_exists($property, $array))
 			$value = $array[$property];
 		else {
 			if ($type == 'number')
@@ -173,12 +173,12 @@ class Company extends \WP_Widget {
 		return $instance;
 	}
 	public static function strip($key, $array) {
-		if (isset($array[$key]))
+		if (array_key_exists($key, $array))
 			return strip_tags($array[$key]);
 		return '';
 	}
 	public static function getValue($key, $array, $default = null)
-	{	if (isset($array[$key]))
+	{	if (array_key_exists($key, $array))
 			return $array[$key];
 		return $default;
 	}
