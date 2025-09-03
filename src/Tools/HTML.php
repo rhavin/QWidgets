@@ -1,5 +1,5 @@
 <?php
-// Version 0.1.18
+// Version 0.1.19
 
 namespace Q\Tools;
 class HTML {
@@ -48,6 +48,7 @@ class HTML {
 		$attr['id'] = $id;
 		$attr['type'] = $type;
 		$attr['name'] = $name;
+		$attr['size'] = $attr['size'] ?? 100;
 		$tagname = 'input';
 
 		switch ($type) {
@@ -62,7 +63,9 @@ class HTML {
 					$attr['value'] = '1';
 				break;
 			case 'textarea':
-				$attr['cols'] = $size;
+				$attr['cols'] = $attr['size'] ?? 40;
+				$attr['rows'] = $attr['rows'] ?? 5;
+				unset($attr['size']);
 				$content = $value;
 				$tagname = 'textarea';
 				break;
@@ -72,7 +75,6 @@ class HTML {
 			case 'number':
 			case 'url':
 			case 'password':
-				$attr['size'] = $size;
 				break;
 			default:
 				// NYI: say something here...
