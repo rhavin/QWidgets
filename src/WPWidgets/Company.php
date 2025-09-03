@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.22
+// Version 0.1.23
 
 /**
  * Adds Company widget.
@@ -75,7 +75,7 @@ class Company extends \WP_Widget {
 	public function form($instance)
 	{
 		if (empty($instance)) {
-	//		$this->get_settings($instance);
+			$this->get_settings($instance);
 			if (empty($instance))
 				$instance = $this->toDefault();
 		}
@@ -179,9 +179,9 @@ class Company extends \WP_Widget {
 			]
 		];
 		// save into options on customizer
-	//	if ($this->is_preview())
-	//		$this->save_settings($instance);
-		return $old_instance;
+		if ($this->is_preview())
+			$this->save_settings($instance);
+		return $instance;
 	}
 	public static function strip($key, $array) {
 		if (array_key_exists($key, $array))
