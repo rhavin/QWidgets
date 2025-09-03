@@ -4,7 +4,7 @@ namespace Q;
 /**
  * Plugin Name:        QWidgets
  * Plugin URI:         https://github.com/rhavin/QWidgets
- * Version:            0.1.31
+ * Version:            0.1.32
  * Description:        RDF/a aware Widgets for Classicpress and Wordpress 
  * Author:             rhavin
  * Author URI:         https://rhavin.de/

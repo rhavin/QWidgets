@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.31
+// Version 0.1.32
 
 /**
  * Adds Company widget.
@@ -355,10 +355,15 @@ class Company extends \WP_Widget {
 			break;
 		}
 		$tag = 'span';
+		$attrs = [];
 		if (array_key_exists('tag', $schema))
 			$tag = $schema['tag'];
-		$attrs = [];
-		$attrs['property'] = $key;
+		if (array_key_exists('typeof', $schema))
+			$attrs['typeof'] = $schema['typeof'];
+		if (array_key_exists('vocab', $schema))
+			$attrs['vocab'] = $schema['vocab'];
+		if ($key != '')
+			$attrs['property'] = $key;
 
 		return \Q\Tools\HTML::to_tag($tag, $content, 0, $attrs);
 	}

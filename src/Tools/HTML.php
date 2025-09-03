@@ -24,7 +24,7 @@ class HTML {
 
 	public static function to_tag($tag, $content, $indent=0, $attr=null) {
 		$spc = str_repeat('  ', $indent);
-		return $spc.'<'.$tag.self::attrlist($attr).'">'.$content.'</'.$tag.">\n";
+		return $spc.'<'.$tag.self::attrlist($attr).'>'.$content.'</'.$tag.">\n";
 	}
 
 
