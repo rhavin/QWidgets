@@ -1,13 +1,12 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.28
+// Version 0.1.29
 
 /**
  * Adds Company widget.
  */
 class Company extends \WP_Widget {
-	const PROPERTYPREFIX = 'q';
-	const METAPREFIX = "m";
+	const METAPREFIX = 'add';
 	public function __construct() {
 		$id_base = 'company_widget';
 		$name    = 'qcompany';
@@ -120,7 +119,7 @@ class Company extends \WP_Widget {
 		}
 		if (is_null($label))
 			$label = $property;
-		$property = self::PROPERTYPREFIX.$property;
+		$property = self::meta_escape($property);
 		echo \Q\Tools\HTML::inputfield(
 			$this->get_field_id($property),
 			$this->get_field_name($property),
@@ -236,19 +235,25 @@ class Company extends \WP_Widget {
 			return $array[$key];
 		return $default;
 	}
+	public static function meta_escape($key) {
+		if (str_starts_with($key, self::METAPREFIX))
+			return self::METAPREFIX.$key;
+	}
 	public static function fold($instance_src) {
 		$instance_dst = [];
 		foreach ($instance_src as $k => $v) {
-			list ($prfx, $key ) =  preg_split('.', $k, 2);
-			switch ($prfx) {
-				case self::PROPERTYPREFIX:
-					$instance_dst[$key] = $v;
-					break;
-				case self::METAPREFIX:
-					// NYI
-					break;
-				default:
-					// NYI
+			if (!str_starts_with($k, self::METAPREFIX)) {
+				$instance_dst[$k] = $v;
+				continue;
+			}
+			$nk = substr($k, strlen(self::METAPREFIX));
+			if (str_starts_with($nk, self::METAPREFIX)) {
+				// escaped METAPREFIX
+				$instance_dst[$nk] = $v;
+				continue;
+			}
+			list($cmd, $rest) = preg_split('.', $nk, 2);
+			switch ($cmd) {
 			}
 		}
 		return $instance_dst;
