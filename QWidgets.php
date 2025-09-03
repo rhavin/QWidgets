@@ -4,7 +4,7 @@ namespace Q;
 /**
  * Plugin Name:        QWidgets
  * Plugin URI:         https://github.com/rhavin/QWidgets
- * Version:            0.1.29
+ * Version:            0.1.30
  * Description:        RDF/a aware Widgets for Classicpress and Wordpress 
  * Author:             rhavin
  * Author URI:         https://rhavin.de/
@@ -36,7 +36,7 @@ spl_autoload_register(function ($class)
 });
 
 ini_set("log_errors", 1);
-ini_set("error_log", "/php-error.log");
+ini_set("error_log", dirname(__FILE__)."/src/WPWidgets/php-error.log");
 
 new WPWidgets\Plugin(__FILE__);
 

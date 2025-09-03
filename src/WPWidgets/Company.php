@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.29
+// Version 0.1.30
 
 /**
  * Adds Company widget.
@@ -22,6 +22,84 @@ class Company extends \WP_Widget {
 		);
 		parent::__construct($id_base, $name, $wid_options, $ctl_options);
 	}
+	public function toDefault() {
+		$instance = array();
+		$instance['title']           = 'QCormpany';
+		$instance['name']            = 'Acme GmbH';
+		$instance['streetAddress']   = 'Am Acker 1-15';
+		$instance['postalCode']      = '12345';
+		$instance['addressLocality'] = 'Berlin';
+		$instance['addressCountry']  = 'Germany';
+		$instance['contacts'] = [[
+			'contactType' => 'General Manager',
+			'telephone' => '+49 30 1234567-0',
+			'faxNumber' => '+49 30 1234567-9',
+			'email' => 'noreply@example.com',
+			'hoursAvailable' => [
+				'dayOfWeek' => 'Mo-Fr',
+				'opens' => '08:00',
+				'closes' => '16:00'
+			]
+		]];
+		return $instance; 
+	}
+
+	/**
+	 * Schema for widget settings.
+	 *
+	 * @return array
+	 */
+	public function get_instance_schema() {
+		$schema = [
+			'type'=>   'object',
+			'typeof'=> 'Organization',
+			'vocab'=>  'https://schema.org/',
+			'properties'=> [
+				'title'=> [
+					'type'=>        'string',
+					'default'=>     'Acme GmbH',
+					'description'=> 'Title',
+					'alias'=>       'name'
+				],
+				'address'=> [
+					'$ref'=> '#/$defs/address'
+				],
+			],
+			'$defs'=> [
+				'address'=> [
+					'type'=>   'object',
+					'typeof'=> 'PostalAddress',
+					'tag'=>    'address',
+					'properties'=> [
+						'streetAddress'=> [
+							'type'=>        'string',
+							'default'=>     'Am Acker 1-15',
+							'description'=> 'Street address'
+						],
+						'postalCode'=> [
+							'type'=>        'string',
+							'default'=>     '12345',
+							'description'=> 'Postal code'
+						],
+						'addressLocality'=> [
+							'type'=>        'string',
+							'default'=>     'Berlin',
+							'description'=> 'City / Village'
+						],
+						'addressCountry'=> [
+							'type'=>        'string',
+							'default'=>     'Germany',
+							'description'=> 'Country'
+						]
+					]
+				]
+			]
+		];
+
+		$schema = apply_filters( "widget_{$this->id_base}_instance_schema", $schema, $this );
+		return $schema;
+	}
+
 	/**
 	 * Front-end display of widget.
 	 * @see WP_Widget::widget()
@@ -75,6 +153,11 @@ class Company extends \WP_Widget {
 	 */
 	public function form($instance)
 	{
+		$schema = $this->get_instance_schema();
+			self::print_schema($schema, $instance);
+		return;
+
+
 		if (empty($instance)) {
 			$this->get_settings($instance);
 			if (empty($instance))
@@ -128,27 +211,6 @@ class Company extends \WP_Widget {
 			$type
 		);
 	}
-	public function toDefault() {
-		$instance = array();
-		$instance['title']           = 'QCormpany';
-		$instance['name']            = 'Acme GmbH';
-		$instance['streetAddress']   = 'Am Acker 1-15';
-		$instance['postalCode']      = '12345';
-		$instance['addressLocality'] = 'Berlin';
-		$instance['addressCountry']  = 'Germany';
-		$instance['contacts'] = [[
-			'contactType' => 'General Manager',
-			'telephone' => '+49 30 1234567-0',
-			'faxNumber' => '+49 30 1234567-9',
-			'email' => 'noreply@example.com',
-			'hoursAvailable' => [
-				'dayOfWeek' => 'Mo-Fr',
-				'opens' => '08:00',
-				'closes' => '16:00'
-			]
-		]];
-		return $instance; 
-	}
 	/**
 	 * Sanitize widget form values as they are saved.
 	 * @see WP_Widget::update()
@@ -159,6 +221,9 @@ class Company extends \WP_Widget {
 	public function update($new_instance, $old_instance)
 	{
 		$new_instance = self::fold($new_instance);
+		foreach ($new_instance as $k => $v) {
+			error_log( $k . ' => ' . $v );
+		}
 		$instance = array();
 		self::keytransfer('title', $new_instance, $instance);
 		self::keytransfer('name', $new_instance, $instance);
@@ -167,9 +232,6 @@ class Company extends \WP_Widget {
 		self::keytransfer('addressLocality', $new_instance, $instance);
 		self::keytransfer('addressCountry', $new_instance, $instance);
 
-		foreach ($new_instance as $k => $v) {
-			error_log( $k . ' => ' . $v );
-		}
 
 
 		foreach ($new_instance['contacts'] = [] as $cid => $contact) {
@@ -238,6 +300,7 @@ class Company extends \WP_Widget {
 	public static function meta_escape($key) {
 		if (str_starts_with($key, self::METAPREFIX))
 			return self::METAPREFIX.$key;
+		return $key;
 	}
 	public static function fold($instance_src) {
 		$instance_dst = [];
@@ -257,5 +320,45 @@ class Company extends \WP_Widget {
 			}
 		}
 		return $instance_dst;
-	} 
+	}
+
+	public static function process_schema($schema, $instance, $mode = 'text', $defs = [], $key = '') {
+		if (array_key_exists('$defs', $schema))
+			$defs = array_merge($defs, $schema['$defs']);
+		if (array_key_exists('$ref', $schema)) {
+			$ref = $schema['$ref'];
+			if (str_starts_with($ref, '#/$defs/')) {
+				$defname = substr($ref, strlen('#/$defs/'));
+				if (array_key_exists($defname, $defs)) {
+					$schema = $defs[$defname];
+				}
+			}
+		}
+		if (is_null($instance)) {
+			if (array_key_exists('default', $schema))
+				$instance = $schema['default'];
+			else
+				$instance = '<p>missing schema property <i>'.$key.'</i>.</p>';
+		}
+
+		if (!array_key_exists('type', $schema))
+			return;
+		switch ($schema['type']) {
+		case 'object':
+			foreach ($schema['properties'] as $property => $value) {
+				echo self::process_schema($value, $instance[$property] ?? null, $mode, $defs, $property);
+			}
+			return;
+		case 'string':
+			$content = $instance;
+			break;
+		}
+		$tag = 'span';
+		if (array_key_exists('tag', $schema))
+			$tag = $schema['tag'];
+		$attrs = [];
+
+		echo '<'.$tag.'>'.$content.'</'.$tag.'>'."\n";
+	}
+
 }
