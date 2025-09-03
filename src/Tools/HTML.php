@@ -1,5 +1,5 @@
 <?php
-// Version 0.1.19
+// Version 0.1.21
 
 namespace Q\Tools;
 class HTML {
