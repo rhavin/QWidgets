@@ -1,11 +1,13 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.26
+// Version 0.1.28
 
 /**
  * Adds Company widget.
  */
 class Company extends \WP_Widget {
+	const PROPERTYPREFIX = 'q';
+	const METAPREFIX = "m";
 	public function __construct() {
 		$id_base = 'company_widget';
 		$name    = 'qcompany';
@@ -118,6 +120,7 @@ class Company extends \WP_Widget {
 		}
 		if (is_null($label))
 			$label = $property;
+		$property = self::PROPERTYPREFIX.$property;
 		echo \Q\Tools\HTML::inputfield(
 			$this->get_field_id($property),
 			$this->get_field_name($property),
@@ -156,6 +159,7 @@ class Company extends \WP_Widget {
 	 */
 	public function update($new_instance, $old_instance)
 	{
+		$new_instance = self::fold($new_instance);
 		$instance = array();
 		self::keytransfer('title', $new_instance, $instance);
 		self::keytransfer('name', $new_instance, $instance);
@@ -164,7 +168,16 @@ class Company extends \WP_Widget {
 		self::keytransfer('addressLocality', $new_instance, $instance);
 		self::keytransfer('addressCountry', $new_instance, $instance);
 
-/*		foreach ($new_instance['contacts'] = [] as $cid => $contact) {
+		foreach ($new_instance as $k => $v) {
+			error_log( $k . ' => ' . $v );
+		}
+
+
+		foreach ($new_instance['contacts'] = [] as $cid => $contact) {
+			error_log( 'contact ' . $cid );
+			error_log('remove is '.self::getValue('remove_'.$cid, $new_instance, 0));
+			continue;
+
 			if (self::getValue('remove_'.$cid, $new_instance, 0) !== 0)
 				continue;
 			$ct = [];
@@ -182,7 +195,7 @@ class Company extends \WP_Widget {
 				$ct['hoursAvailable'] = $hours;
 			}
 			$instance['contacts'][] = $ct;
-		} */
+		}
 		$instance['contacts'] = [
 			[
 				'telephone' => '+49 30 820099-0',
@@ -223,4 +236,21 @@ class Company extends \WP_Widget {
 			return $array[$key];
 		return $default;
 	}
+	public static function fold($instance_src) {
+		$instance_dst = [];
+		foreach ($instance_src as $k => $v) {
+			list ($prfx, $key ) =  preg_split('.', $k, 2);
+			switch ($prfx) {
+				case self::PROPERTYPREFIX:
+					$instance_dst[$key] = $v;
+					break;
+				case self::METAPREFIX:
+					// NYI
+					break;
+				default:
+					// NYI
+			}
+		}
+		return $instance_dst;
+	} 
 }
