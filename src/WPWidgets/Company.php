@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.30
+// Version 0.1.31
 
 /**
  * Adds Company widget.
@@ -24,7 +24,7 @@ class Company extends \WP_Widget {
 	}
 	public function toDefault() {
 		$instance = array();
-		$instance['title']           = 'QCormpany';
+		$instance['title']           = 'QCompany';
 		$instance['name']            = 'Acme GmbH';
 		$instance['streetAddress']   = 'Am Acker 1-15';
 		$instance['postalCode']      = '12345';
@@ -154,7 +154,7 @@ class Company extends \WP_Widget {
 	public function form($instance)
 	{
 		$schema = $this->get_instance_schema();
-			self::print_schema($schema, $instance);
+		echo self::process_schema($schema, $instance);
 		return;
 
 
@@ -343,12 +343,13 @@ class Company extends \WP_Widget {
 
 		if (!array_key_exists('type', $schema))
 			return;
+		$content = '';
 		switch ($schema['type']) {
 		case 'object':
 			foreach ($schema['properties'] as $property => $value) {
-				echo self::process_schema($value, $instance[$property] ?? null, $mode, $defs, $property);
+				$content .= self::process_schema($value, $instance[$property] ?? null, $mode, $defs, $property);
 			}
-			return;
+			break;
 		case 'string':
 			$content = $instance;
 			break;
@@ -357,8 +358,9 @@ class Company extends \WP_Widget {
 		if (array_key_exists('tag', $schema))
 			$tag = $schema['tag'];
 		$attrs = [];
+		$attrs['property'] = $key;
 
-		echo '<'.$tag.'>'.$content.'</'.$tag.'>'."\n";
+		return \Q\Tools\HTML::to_tag($tag, $content, 0, $attrs);
 	}
 
 }

@@ -1,5 +1,5 @@
 <?php
-// Version 0.1.21
+// Version 0.1.31
 
 namespace Q\Tools;
 class HTML {
@@ -21,6 +21,12 @@ class HTML {
 		$spc = str_repeat('  ', $indent);
 		return $spc.'<'.$tag.' property="'.esc_attr($property).' '.self::attrlist($attr).'">'.$content.'</'.$tag.">\n";
 	}
+
+	public static function to_tag($tag, $content, $indent=0, $attr=null) {
+		$spc = str_repeat('  ', $indent);
+		return $spc.'<'.$tag.self::attrlist($attr).'">'.$content.'</'.$tag.">\n";
+	}
+
 
 	public static function timeparse($time) {
 		$parts = explode(':', $time);
