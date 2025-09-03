@@ -75,6 +75,7 @@ class HTML {
 			case 'number':
 			case 'url':
 			case 'password':
+				$attr['value'] = $value;
 				break;
 			default:
 				// NYI: say something here...
