@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.33
+// Version 0.1.34
 
 /**
  * Adds Company widget.
@@ -66,9 +66,9 @@ class Company extends \WP_Widget {
 				],
 				'contacts'=> [
 					'type'=>        'array',
-					'items' : {
+					'items' => [
 						'$ref'=>    '#/$defs/contactPoint'
-					}
+					]
 				],
 			],
 			'$defs'=> [
