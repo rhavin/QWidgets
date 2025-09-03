@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.34
+// Version 0.1.35
 
 /**
  * Adds Company widget.
@@ -377,9 +377,13 @@ class Company extends \WP_Widget {
 		if (!array_key_exists('type', $schema))
 			return;
 		$content = '';
+		$childs = 'properties';
+
 		switch ($schema['type']) {
+		case 'array':
+			$childs = 'items';
 		case 'object':
-			foreach ($schema['properties'] as $property => $value) {
+			foreach ($schema[$childs] as $property => $value) {
 				$content .= self::process_schema($value, $instance[$property] ?? null, $mode, $defs, $property);
 			}
 			break;
@@ -387,6 +391,7 @@ class Company extends \WP_Widget {
 			$content = $instance;
 			break;
 		}
+
 		$tag = 'span';
 		$attrs = [];
 		if (array_key_exists('tag', $schema))
