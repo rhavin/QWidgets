@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.17
+// Version 0.1.20
 
 /**
  * Adds Company widget.
@@ -89,7 +89,7 @@ class Company extends \WP_Widget {
 		$cid = 0;
 		if (array_key_exists('contacts', $instance)) {
 			foreach ($instance['contacts'] as $contact) {
-				echo '<hr><strong>Contact #'.$cid.'</strong><br>';
+				echo '<details><summary>Contact #'.$cid.'</summary>';
 				$this->input('contactType', $contact);
 				$this->input('telephone', $contact);
 				$this->input('faxNumber', $contact);
@@ -101,6 +101,7 @@ class Company extends \WP_Widget {
 					$this->input('closes', $hours, 'time');
 				}
 				$this->input('remove_'.$cid, $instance, 'remove this contact', 'checkbox');
+				echo '</details>';
 				++$cid;
 			}
 		}
