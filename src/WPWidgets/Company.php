@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.24
+// Version 0.1.25
 
 /**
  * Adds Company widget.
@@ -157,13 +157,13 @@ class Company extends \WP_Widget {
 	public function update($new_instance, $old_instance)
 	{
 		$instance = array();
-		$instance['title']           = 'QCompany';
-		$instance['name']            = self::strip('name', $new_instance);
-		$instance['streetAddress']   = self::strip('streetAddress', $new_instance);
-		$instance['postalCode']      = self::strip('postalCode', $new_instance);
-		$instance['addressLocality'] = self::strip('addressLocality', $new_instance);
-		$instance['addressCountry']  = self::strip('addressCountry', $new_instance);
-		$instance['contacts'] = [];
+		self::keytransfer('title', $new_instance, $instance);
+		self::keytransfer('name', $new_instance, $instance);
+		self::keytransfer('streetAddress', $new_instance, $instance);
+		self::keytransfer('postalCode', $new_instance, $instance);
+		self::keytransfer('addressLocality', $new_instance, $instance);
+		self::keytransfer('addressCountry', $new_instance, $instance);
+
 /*		foreach ($new_instance['contacts'] = [] as $cid => $contact) {
 			if (self::getValue('remove_'.$cid, $new_instance, 0) !== 0)
 				continue;
