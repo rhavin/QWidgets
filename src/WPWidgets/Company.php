@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.23
+// Version 0.1.24
 
 /**
  * Adds Company widget.
@@ -134,7 +134,7 @@ class Company extends \WP_Widget {
 		$instance['postalCode']      = '12345';
 		$instance['addressLocality'] = 'Berlin';
 		$instance['addressCountry']  = 'Germany';
-		$instance['contacts'] = [
+		$instance['contacts'] = [[
 			'contactType' => 'General Manager',
 			'telephone' => '+49 30 1234567-0',
 			'faxNumber' => '+49 30 1234567-9',
@@ -144,7 +144,7 @@ class Company extends \WP_Widget {
 				'opens' => '08:00',
 				'closes' => '16:00'
 			]
-		];
+		]];
 		return $instance; 
 	}
 	/**
@@ -163,6 +163,26 @@ class Company extends \WP_Widget {
 		$instance['postalCode']      = self::strip('postalCode', $new_instance);
 		$instance['addressLocality'] = self::strip('addressLocality', $new_instance);
 		$instance['addressCountry']  = self::strip('addressCountry', $new_instance);
+		$instance['contacts'] = [];
+/*		foreach ($new_instance['contacts'] = [] as $cid => $contact) {
+			if (self::getValue('remove_'.$cid, $new_instance, 0) !== 0)
+				continue;
+			$ct = [];
+			$ct['contactType'] = self::strip('contactType', $contact);
+			$ct['telephone']   = self::strip('telephone', $contact);
+			$ct['faxNumber']   = self::strip('faxNumber', $contact);
+			$ct['email']       = self::strip('email', $contact);
+			if (is_array($contact) && (array_key_exists('dayOfWeek', $contact)
+					|| array_key_exists('opens', $contact)
+					|| array_key_exists('closes', $contact))) {
+				$hours = array();
+				$hours['dayOfWeek'] = self::strip('dayOfWeek', $contact);
+				$hours['opens']     = self::strip('opens', $contact);
+				$hours['closes']    = self::strip('closes', $contact);
+				$ct['hoursAvailable'] = $hours;
+			}
+			$instance['contacts'][] = $ct;
+		} */
 		$instance['contacts'] = [
 			[
 				'telephone' => '+49 30 820099-0',
@@ -187,6 +207,13 @@ class Company extends \WP_Widget {
 		if (array_key_exists($key, $array))
 			return strip_tags($array[$key]);
 		return '';
+	}
+	public static function keytransfer($key, &$array_src, &$array_dst) {
+		if (!is_array($array_src) || !array_key_exists($key, $array_src)) {
+			unset($array_dst[$key]);
+			return;
+		}
+		$array_dst[$key] = strip_tags($array[$key]);
 	}
 	public static function getValue($key, $array, $default = null)
 	{
