@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.32
+// Version 0.1.33
 
 /**
  * Adds Company widget.
@@ -62,7 +62,13 @@ class Company extends \WP_Widget {
 					'alias'=>       'name'
 				],
 				'address'=> [
-					'$ref'=> '#/$defs/address'
+					'$ref'=>        '#/$defs/address'
+				],
+				'contacts'=> [
+					'type'=>        'array',
+					'items' : {
+						'$ref'=>    '#/$defs/contactPoint'
+					}
 				],
 			],
 			'$defs'=> [
@@ -91,6 +97,33 @@ class Company extends \WP_Widget {
 							'default'=>     'Germany',
 							'description'=> 'Country'
 						]
+					]
+				],
+				'contactPoint' => [
+					'type'=>   'object',
+					'typeof'=> 'ContactPoint',
+					'properties'=> [
+						'contactType'=> [
+							'type'=>        'string',
+							'default'=>     'General Manager',
+							'description'=> 'Contact Type'
+						],
+						'telephone'=> [
+							'type'=>        'string',
+							'default'=>     '+49 30 1234567-0',
+							'description'=> 'Telephone'
+						],
+						'faxNumber'=> [
+							'type'=>        'string',
+							'default'=>     '+49 30 1234567-9',
+							'description'=> 'Fax Number'
+						],
+						'email'=> [
+							'type'=>        'string',
+							'default'=>     'a@bc.org',
+							'description'=> 'Email',
+							'tag'=>         'a'
+						],
 					]
 				]
 			]
