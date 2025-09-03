@@ -1,6 +1,6 @@
 <?php
 namespace Q\WPWidgets;
-// Version 0.1.25
+// Version 0.1.26
 
 /**
  * Adds Company widget.
@@ -209,11 +209,13 @@ class Company extends \WP_Widget {
 		return '';
 	}
 	public static function keytransfer($key, &$array_src, &$array_dst) {
-		if (!is_array($array_src) || !array_key_exists($key, $array_src)) {
+		if (!is_array($array_src))
+			return;
+		if (!array_key_exists($key, $array_src)) {
 			unset($array_dst[$key]);
 			return;
 		}
-		$array_dst[$key] = strip_tags($array[$key]);
+		$array_dst[$key] = strip_tags($array_src[$key]);
 	}
 	public static function getValue($key, $array, $default = null)
 	{
