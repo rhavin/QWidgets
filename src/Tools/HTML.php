@@ -1,5 +1,5 @@
 <?php
-// Version 0.1.13
+// Version 0.1.18
 
 namespace Q\Tools;
 class HTML {
@@ -41,10 +41,55 @@ class HTML {
 		return $list;
 	}
 
-	public static function inputfield($id, $name, $label, $value, $type='text', $size=100) {
-		return '<label for="'.$id.'">'.$label.':</label>'
-			.'<input class="widefat" id="'.$id.'" name="'.$name.'" type="'
-			.$type.'" value="'.$value.'" />';
+	public static function inputfield($id, $name, $label, $value, $type='text', $attr = []) {
+		$label_first = true;
+		$content = null;
+		$labelsuffix = ':';
+		$attr['id'] = $id;
+		$attr['type'] = $type;
+		$attr['name'] = $name;
+		$tagname = 'input';
+
+		switch ($type) {
+			case 'checkbox':
+				$label_first = false;
+				$labelsuffix = '';
+				$attr['class'] = 'checkbox';
+				if ($value) {
+					$attr['value'] = '1';
+					$attr['checked'] = 'checked';
+				} else
+					$attr['value'] = '1';
+				break;
+			case 'textarea':
+				$attr['cols'] = $size;
+				$content = $value;
+				$tagname = 'textarea';
+				break;
+			case 'text':
+				$attr['class'] = 'widefat';
+			case 'email':
+			case 'number':
+			case 'url':
+			case 'password':
+				$attr['size'] = $size;
+				break;
+			default:
+				// NYI: say something here...
+		}
+
+		$label = '<label for="'.$id.'">'.$label.$labelsuffix.'</label>';
+
+		$field = '<'.$tagname.self::attrlist($attr);
+		if (is_null($content))
+			$field .= ' />';
+		else
+			$field .= ' >'.$content.'</'.$tagname.'>';
+
+		if ($label_first)
+			return $label.$field;
+		else
+			return $field.$label;
 	}
 }
 ?>
