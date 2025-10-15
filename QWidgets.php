@@ -4,7 +4,7 @@ namespace Q;
 /**
  * Plugin Name:        QWidgets
  * Plugin URI:         https://github.com/rhavin/QWidgets
- * Version:            0.1.35
+ * Version:            0.1.36
  * Description:        RDF/a aware Widgets for Classicpress and Wordpress 
  * Author:             rhavin
  * Author URI:         https://rhavin.de/
@@ -26,7 +26,7 @@ spl_autoload_register(function ($class)
 		return; // aint me babe
 	$class = substr($class, strlen(__NAMESPACE__ . '\\'));
 	$class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
-	$class = dirname(__FILE__).'/src/'.$class .'.php';
+	$class = dirname(__FILE__).'/_src/'.$class .'.php';
 	if (!file_exists($class))
 	{
 		error_log('Class ['.$class.'] not found');
@@ -36,7 +36,7 @@ spl_autoload_register(function ($class)
 });
 
 ini_set("log_errors", 1);
-ini_set("error_log", dirname(__FILE__)."/src/WPWidgets/php-error.log");
+ini_set("error_log", dirname(__FILE__)."/_src/WPWidgets/php-error.log");
 
 new WPWidgets\Plugin(__FILE__);
 
