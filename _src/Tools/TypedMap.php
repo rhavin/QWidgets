@@ -134,9 +134,9 @@ class TypedMap implements Map
 	public function offsetGet(mixed $key): mixed
 	{
 		$values = $this->get($key);
-		if ($this->count($values) == 0)
-			return null;
-		return $values[0];
+//		if ($this->count($values) == 0)
+//			return null;
+		return $values[0] ?? null;
 	}
 	/**
 	 * Set values that are considered targeted (via the keyCompare-function)

@@ -1,0 +1,20 @@
+{
+	"name": "shadowtec/q-widgets",
+	"description": "Description of project QWidgets.",
+	"authors": [
+		{
+			"name": "rhavin",
+			"email": "r@rhavin.de"
+		}
+	],
+	"autoload": {
+		"psr-4": {"Q\\": "_src/"}
+	},
+	"autoload-dev": {
+    "psr-4": { "Q\\Tests\\": "_test/" },
+		"files": ["_test/Tools/test_helpers.php"]
+  },
+	"require-dev": {
+		"phpunit/phpunit": "^10.0"
+	}
+}
