@@ -5,7 +5,7 @@ namespace Q\Restricted;
  *
  * @author rhavin
  */
-class Item extends RestrictedClass {
+class Item extends Base {
 	/**
 	 * @var mixed The arbitrary value we're holding.
 	 */

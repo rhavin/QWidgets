@@ -1,9 +1,9 @@
 <?php
 namespace Q\Restricted;
 
-class MockRestricted extends RestrictedClass {}
+class MockRestricted extends Base {}
 
-class RestrictedTest extends \PHPUnit\Framework\TestCase {
+class BaseTest extends \PHPUnit\Framework\TestCase {
 	protected ?Restrictor $object = null;
 
 	#[\Override]

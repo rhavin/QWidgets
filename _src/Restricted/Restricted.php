@@ -99,7 +99,7 @@ trait Restricted
 	{
 		if (is_null($this->_restrictor))
 			return false;
-		$this->_restrictor->setAccess($access);
+		return $this->_restrictor->setAccess($access);
 	}
 	/**
 	 * Directly allow the given access if the current user is allowed to do so.
@@ -111,7 +111,7 @@ trait Restricted
 	{
 		if (is_null($this->_restrictor))
 			return false;
-		$this->_restrictor->allowAccess($access);
+		return $this->_restrictor->allowAccess($access);
 	}
 	/**
 	 * Directly deny the given access if the current user is allowed to do so.
@@ -123,6 +123,6 @@ trait Restricted
 	{
 		if (is_null($this->_restrictor))
 			return false;
-		$this->_restrictor->denyAccess($access);
+		return $this->_restrictor->denyAccess($access);
 	}
 }

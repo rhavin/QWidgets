@@ -7,7 +7,7 @@ namespace Q\Restricted;
  *
  * @author rhavin
  */
-abstract class RestrictedClass implements Restrictor
+abstract class Base implements Restrictor
 {
 	use Restricted;
 }
