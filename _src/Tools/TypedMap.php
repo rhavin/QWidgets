@@ -11,6 +11,8 @@ class TypedMap implements Map
 {
 	const DEF_SIZE = 5;
 	const DEF_INCREMENT = 5;
+	private bool $my_keylocked = false;
+	private bool $my_vallocked = false;
 	/** @var ?\SplFixedArray the array holding the keys */
 	private ?\SplFixedArray $my_keys   = null;
 	/** @var ?\SplFixedArray the array holding the values */

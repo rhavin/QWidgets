@@ -15,7 +15,7 @@ class SchemaTest extends \PHPUnit\Framework\TestCase {
 		// use random but consistent ID and type
 		$this->testID   = random_int(1000, 9999);
 		$this->testType = random_int(1000, 9999);
-		$this->object = new MockupSchema($this->testID, $this->testType);
+		$this->object = MockupSchema::instance($this->testID, $this->testType);
 	}
 	#[\Override]
 	protected function tearDown(): void {}

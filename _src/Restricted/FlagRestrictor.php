@@ -65,7 +65,7 @@ class FlagRestrictor implements Restrictor
 	 */
 	public function isDenied(mixed $access): bool
     {
-		return ($this->my_flags & $access > 0);
+		return (($this->my_flags & $access) > 0);
 	}
 	/**
 	 * Sets the access to a new value if the current user is allowed

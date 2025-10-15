@@ -21,6 +21,12 @@ abstract class Schema {
 		$this->my_map['type'] = $type;
 		$this->my_map->lockKeys();
 	}
+	public static function instance(?string $id = null, string $type = '') : static
+	{
+		$that = new static($id, $type);
+		$that->my_map->lockKeys();
+		return $that;
+	}
 	/**
 	 * The type of the schema node.
 	 * 
@@ -62,8 +68,7 @@ abstract class Schema {
 		// type cant be changed once initialized
 		if ($attribute == 'type')
 			return false;
-		$this->my_map[$attribute] = $value;
-		return true;
+		return $this->my_map->set($attribute, $value);
 	}
 	/**
 	 * Gets the value of a schema-nodes attribute. If that attribute

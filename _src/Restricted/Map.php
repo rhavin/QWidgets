@@ -24,25 +24,51 @@ class Map extends \Q\Tools\TypedMap implements Restrictor
 		$this->setRestrictor($restrictor);
 		parent::__construct($size);
 	}
-	/**
-	 * Locks the keys of the map. After calling this method, no new keys
-	 * can be added or removed.
+		/**
+	 * Locks or unlocks rename, adding and removal of keys.
+	 * 
+	 * @param bool $lock true to lock, false to unlock.
+	 * @return bool true if successful, otherwise false.
 	 */
-	public function lockKeys()
+	public function lockKeys(bool $lock = true) : bool
 	{
-		$this->denyAccess(Restrictor::DENY_CREATE | Restrictor::DENY_DELETE);
+		if ($lock)
+			return $this->denyAccess(Restrictor::DENY_CREATE | Restrictor::DENY_DELETE);
+		return $this->allowAccess(Restrictor::DENY_CREATE | Restrictor::DENY_DELETE);
 	}
 	/**
-	 * Locks the values of the map. After calling this method, no values
-	 * can be changed.
+	 * Locks or unlocks write access to values.
+	 * 
+	 * @param bool $lock true to lock, false to unlock.
+	 * @return bool true if successful, otherwise false.
 	 */
-	public function lockValues()
+	public function lockValues(bool $lock = true) : bool
 	{
-		$this->denyAccess(
-			Restrictor::DENY_CREATE | Restrictor::DENY_DELETE | Restrictor::DENY_WRITE
+		if ($lock)
+			return $this->denyAccess(Restrictor::DENY_CREATE
+							| Restrictor::DENY_DELETE | Restrictor::DENY_WRITE
 		);
+			return $this->allowAccess(Restrictor::DENY_CREATE
+							| Restrictor::DENY_DELETE | Restrictor::DENY_WRITE);
 	}
-	public function getAccess() : int {
+	public function getAccess2deprecated() : int {
 		return $this->getRestrictor()->getAccess();
+	}
+	public function get(mixed $key): array {
+		if ($this->isDeniedRead())
+			return [];
+		return parent::get($key);
+	}
+	public function set(mixed $key, $value): int {
+		if ($this->isDeniedWrite())
+			return 0;
+		if (!$this->offsetExists($key) && $this->isDeniedCreate())
+			return 0;
+		return parent::set($key,$value);
+	}
+	public function remove(mixed $key): int {
+		if ($this->isDeniedDelete())
+			return 0;
+		return parent::remove($key);
 	}
 }
